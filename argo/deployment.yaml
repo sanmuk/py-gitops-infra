@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: py-gitops-app
-        image: redis:6.2.4-alpine
+        image: docker.io/sanmuk21/py-gitops-app:0.1
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 8080
