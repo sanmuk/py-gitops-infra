@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: py-gitops-app
+  namespace: py-gitops-app
+  labels:
+    app: py-gitops-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: py-gitops-app
+  template:
+    metadata:
+      labels:
+        app: py-gitops-app
+    spec:
+      containers:
+      - name: py-gitops-app
+        image: docker.io/sanmuk21/py-gitops-app:0.1
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8080
