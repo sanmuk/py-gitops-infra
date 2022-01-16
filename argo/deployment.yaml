@@ -1,12 +1,11 @@
 apiVersion: apps/v1
-kind: Deployment
+kind: DaemonSet
 metadata:
   name: py-gitops-app
   namespace: py-gitops-app
   labels:
     app: py-gitops-app
 spec:
-  replicas: 1
   selector:
     matchLabels:
       app: py-gitops-app
@@ -15,6 +14,10 @@ spec:
       labels:
         app: py-gitops-app
     spec:
+      tolerations:
+      - key: node-role.kubernetes.io/master
+        operator: Exists
+        effect: NoSchedule
       containers:
       - name: py-gitops-app
         image: docker.io/sanmuk21/py-gitops-app:0.1
