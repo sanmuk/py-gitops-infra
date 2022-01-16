@@ -1,28 +1,61 @@
+---
 apiVersion: apps/v1
-kind: DaemonSet
+kind: Deployment
 metadata:
-  name: py-gitops-app
+  name: py-gitops-app-u
   namespace: py-gitops-app
   labels:
     app: py-gitops-app
+    env: py-gitops-app-w
 spec:
   selector:
     matchLabels:
       app: py-gitops-app
+      env: py-gitops-app-u
+  replicas: 1
   template:
     metadata:
       labels:
         app: py-gitops-app
+        env: py-gitops-app-u
     spec:
-      tolerations:
-      - key: node-role.kubernetes.io/master
-        operator: Exists
-        effect: NoSchedule
       containers:
-      - name: py-gitops-app
-        image: docker.io/sanmuk21/py-gitops-app:0.1
-        imagePullPolicy: IfNotPresent
-        ports:
-        - containerPort: 8080
-      imagePullSecrets:
-      - name: regcred
+        - name: py-gitops-app-u
+          image: "docker.io/sanmuk21/py-gitops-app:0.1"
+          ports:
+            - name: http
+              containerPort: 8080
+      nodeSelector:
+        env: unix
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: py-gitops-app-w
+  namespace: py-gitops-app
+  labels:
+    app: py-gitops-app
+    env: py-gitops-app-w
+spec:
+  selector:
+    matchLabels:
+      app: py-gitops-app
+      env: py-gitops-app-w
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: py-gitops-app
+        env: py-gitops-app-w
+    spec:
+      containers:
+        - name: py-gitops-app-w
+          image: "docker.io/sanmuk21/py-gitops-app-win:0.1"
+          ports:
+            - name: http
+              containerPort: 8080
+      nodeSelector:
+        env: windows
+
+
